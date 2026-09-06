@@ -1,0 +1,40 @@
+1783295435211	Sync.SyncScheduler	DEBUG	Next sync in 3600000 ms. (why=schedule)
+1783295570267	Sync.Service	DEBUG	User-Agent: Zen/1.22t (Linux x86_64) FxSync/1.154.0.20260703112201.desktop
+1783295570267	Sync.Service	INFO	Starting sync at 2026-07-05 16:52:50 in browser session Mjxi9lhfeJCv
+1783295570267	Sync.SyncScheduler	DEBUG	Clearing sync triggers and the global score.
+1783295570268	Sync.Status	INFO	Resetting Status.
+1783295570268	Sync.Status	DEBUG	Status.service: success.status_ok => success.status_ok
+1783295570268	FirefoxAccounts	DEBUG	FxAccountsProfileClient: Requested profile
+1783295570268	FirefoxAccounts	DEBUG	getOAuthToken enter
+1783295570268	FirefoxAccounts	TRACE	getCachedToken returning cached token
+1783295570268	FirefoxAccounts	DEBUG	getOAuthToken returning a cached token
+1783295570268	Services.Common.RESTRequest	DEBUG	GET request to https://profile.accounts.firefox.com/v1/profile
+1783295570269	Sync.SyncAuthManager	INFO	Getting sync key
+1783295570269	FirefoxAccounts	DEBUG	getOAuthToken enter
+1783295570269	FirefoxAccounts	TRACE	getCachedToken returning cached token
+1783295570269	FirefoxAccounts	DEBUG	getOAuthToken returning a cached token
+1783295570269	Sync.SyncAuthManager	INFO	Getting a sync token from: https://token.services.mozilla.com/1.0/sync/1.5
+1783295570269	Sync.SyncAuthManager	DEBUG	Getting a token using OAuth
+1783295570269	Services.Common.TokenServerClient	DEBUG	Beginning OAuth token exchange: https://token.services.mozilla.com/1.0/sync/1.5
+1783295570269	Services.Common.RESTRequest	DEBUG	GET request to https://token.services.mozilla.com/1.0/sync/1.5
+1783295570283	Services.Common.RESTRequest	DEBUG	GET https://token.services.mozilla.com/1.0/sync/1.5 failed: 2152398878 - NS_ERROR_UNKNOWN_HOST
+1783295570284	Sync.SyncAuthManager	ERROR	Non-authentication error in _fetchTokenForUser: TokenServerClientNetworkError({"error":{}})(resource://services-common/tokenserverclient.sys.mjs:28:36) JS Stack trace: TokenServerClientNetworkError@tokenserverclient.sys.mjs:51:16
+_tokenServerExchangeRequest@tokenserverclient.sys.mjs:235:13
+1783295570284	Sync.Status	DEBUG	Status.login: success.login => error.login.reason.network
+1783295570284	Sync.Status	DEBUG	Status.service: success.status_ok => error.login.failed
+1783295570284	FirefoxAccounts	TRACE	Getting command keys: https://identity.mozilla.com/cmd/open-uri
+1783295570284	Sync.SyncAuthManager	ERROR	Failed to fetch a token for authentication: TokenServerClientNetworkError({"error":{}})(resource://services-common/tokenserverclient.sys.mjs:28:36) JS Stack trace: TokenServerClientNetworkError@tokenserverclient.sys.mjs:51:16
+_tokenServerExchangeRequest@tokenserverclient.sys.mjs:235:13
+1783295570284	FirefoxAccounts	TRACE	Getting command keys: https://identity.mozilla.com/cmd/close-uri/v1
+1783295570357	Sync.Resource	DEBUG	GET fail 401 https://sync-1-us-west1-g.sync.services.mozilla.com/1.5/280128276/info/collections
+1783295570357	Sync.Resource	WARN	GET request to https://sync-1-us-west1-g.sync.services.mozilla.com/1.5/280128276/info/collections failed with status 401
+1783295570357	Sync.Service	INFO	Logging out
+1783295570357	Sync.SyncScheduler	DEBUG	Next sync in 3600000 ms. (why=schedule)
+1783295570358	Sync.ErrorHandler	INFO	Got 401 response; resetting clusterURL.
+1783295570358	Sync.ErrorHandler	DEBUG	New mid-sync 401 failure. Making a note.
+1783295570358	Sync.ErrorHandler	INFO	Attempting to schedule another sync.
+1783295570358	Sync.Service	ERROR	Aborting sync: failed to get collections.
+1783295570358	Sync.ErrorHandler	ERROR	Sync encountered an error: {"data":"0","url":"https://sync-1-us-west1-g.sync.services.mozilla.com/1.5/280128276/info/collections","status":401,"success":false,"headers":{"accept-ranges":"bytes","content-length":"1","content-type":"application/json","date":"Sun, 05 Jul 2026 23:52:50 GMT","server":"nginx/1.22.0","vary":"Origin, Access-Control-Request-Method, Access-Control-Request-Headers","via":"1.1 google, 1.1 varnish","x-cache":"MISS","x-cache-hits":"0","x-firefox-spdy":"h2","x-served-by":"cache-bfi-krnt7300034-BFI","x-timer":"S1783295570.285241,VS0,VE60","x-weave-timestamp":"1783295570.31"},"obj":0}
+1783295570358	Sync.SyncScheduler	DEBUG	Next sync in 600000 ms. (why=reschedule)
+1783295570358	Sync.Telemetry	INFO	Early submission of sync telemetry due to changed IDs/NodeType
+1783295570360	Sync.Service	DEBUG	Exception calling anonymous function: {"data":"0","url":"https://sync-1-us-west1-g.sync.services.mozilla.com/1.5/280128276/info/collections","status":401,"success":false,"headers":{"accept-ranges":"bytes","content-length":"1","content-type":"application/json","date":"Sun, 05 Jul 2026 23:52:50 GMT","server":"nginx/1.22.0","vary":"Origin, Access-Control-Request-Method, Access-Control-Request-Headers","via":"1.1 google, 1.1 varnish","x-cache":"MISS","x-cache-hits":"0","x-firefox-spdy":"h2","x-served-by":"cache-bfi-krnt7300034-BFI","x-timer":"S1783295570.285241,VS0,VE60","x-weave-timestamp":"1783295570.31"},"obj":0}
