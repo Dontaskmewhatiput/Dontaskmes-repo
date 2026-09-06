@@ -1,0 +1,1 @@
+Sanity check, if cat reimplementation successfully prints this out, the code works
