@@ -25,16 +25,17 @@ end, { desc = "Neotree smart focus toggle" })
 M.lsp_keymaps = function(bufnr)
   local buf_opts = { buffer = bufnr, remap = false, silent = true }
 
-  -- Code navigation, LSP
-  map("n", "gd", vim.lsp.buf.definition, buf_opts)
-  map("n", "gD", vim.lsp.buf.declaration, buf_opts)
-  map("n", "gi", vim.lsp.buf.implementation, buf_opts)
-  map("n", "gr", vim.lsp.buf.references, buf_opts)
-  map("n", "K", vim.lsp.buf.hover, buf_opts)
-  map("i", "<C-k>", vim.lsp.buf.signature_help, buf_opts)
-  map("n", "<leader>rn", vim.lsp.buf.rename, buf_opts)
-  map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, buf_opts)
-  map("n", "gl", vim.diagnostic.open_float, buf_opts)
+map('n', 'K', vim.lsp.buf.hover)
+map('n', 'gd', vim.lsp.buf.definition)
+map('n', 'gD', vim.lsp.buf.declaration)
+map('n', 'gi', vim.lsp.buf.implementation)
+map('n', 'go', vim.lsp.buf.type_definition)
+map('n', 'gr', vim.lsp.buf.references)
+map('n', 'gs', vim.lsp.buf.signature_help)
+map('n', 'gl', vim.diagnostic.open_float)
+map('n', '<F2>', vim.lsp.buf.rename)
+map({ 'n', 'x' }, '<F3>', function() vim.lsp.buf.format({ async = true }) end)
+map('n', '<F4>', vim.lsp.buf.code_action)
 
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
