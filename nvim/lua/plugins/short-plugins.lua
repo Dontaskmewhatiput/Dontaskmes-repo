@@ -17,16 +17,7 @@ return {
     config = true,
   },
   {
-    "folke/snacks.nvim",
-    priority = 1000,
-    lazy = false,
-    opts = {
+    "rafamadriz/friendly-snippets",
+    event = "InsertEnter",
   },
-  {
-      'hrsh7th/nvim-cmp',
-      dependencies = {
-        'hrsh7th/cmp-nvim-lsp',
-      },
-  },
-  }
 }

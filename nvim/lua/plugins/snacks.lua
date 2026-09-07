@@ -3,6 +3,19 @@ return {
   priority = 1000,
   lazy = false,
   opts = {
-    rename = { enabled = true },
+    terminal = {
+      win = {
+        style = "float",
+        border = "rounded",
+      },
+    },
+  },
+  keys = {
+    {
+      "<C-\\>",
+      function() Snacks.terminal() end,
+      desc = "Toggle terminal",
+      mode = { "n", "t" },
+    },
   },
 }
