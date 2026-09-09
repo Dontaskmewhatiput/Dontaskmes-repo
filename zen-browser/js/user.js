@@ -310,9 +310,18 @@ user_pref("media.ffmpeg.vaapi.enabled", true); // Linux VAAPI hardware decode; n
 // omitted: conflicts with the Zen-specific override above (set to false).
 
 // Custom preferences
+// This removes links from the floating URL bar
 user_pref("browser.newtabpage.activity-stream.feeds.system.topsite", false);
 user_pref("browser.newtabpage.activity-stream.feeds.system.topsites", false);
 user_pref("browser.newtabpage.activity-stream.feeds.system.topstories", false);
+
+// Zen specific features
+user_pref("zen.urlbar.replace-newtab", true);
+user_pref("zen.theme.acrylic-elements", true);
+user_pref("zen.theme.accent-color", #ffffff90); 
+user_pref("zen.theme.content-element-separation", 8);
+user_pref("zen.theme.gradient.show-custom-colors", true);
+user_pref("zen.theme.border-radius", 8);
 
 
 
