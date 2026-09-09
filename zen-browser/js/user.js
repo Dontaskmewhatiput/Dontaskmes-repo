@@ -226,7 +226,7 @@ user_pref("reader.parse-on-load.enabled", false);
 // Enter your personal overrides below this line:
 
 user_pref("layers.low-precision-buffer", true);
-user_pref("layers.low-precision-resolution", 0.5);
+user_pref("layers.low-precision-resolution", 0.25);
 
 /****************************************************************************
  * SECTION: PERFORMANCE (MEMORY, CACHE, GPU, MEDIA, PROCESSES)              *
@@ -323,8 +323,6 @@ user_pref("zen.theme.content-element-separation", 8);
 user_pref("zen.theme.gradient.show-custom-colors", true);
 user_pref("zen.theme.border-radius", 8);
 
-
-
 /****************************************************************************
  * SECTION: SMOOTHFOX                                                       *
 ****************************************************************************/
@@ -336,15 +334,15 @@ user_pref("zen.theme.border-radius", 8);
  
 user_pref("apz.overscroll.enabled", true); // DEFAULT NON-LINUX
 user_pref("general.smoothScroll", true); // DEFAULT
-user_pref("general.smoothScroll.msdPhysics.continuousMotionMaxDeltaMS", 12);
+user_pref("general.smoothScroll.msdPhysics.continuousMotionMaxDeltaMS", 25);
 user_pref("general.smoothScroll.msdPhysics.enabled", true);
 user_pref("general.smoothScroll.msdPhysics.motionBeginSpringConstant", 600);
 user_pref("general.smoothScroll.msdPhysics.regularSpringConstant", 650);
 user_pref("general.smoothScroll.msdPhysics.slowdownMinDeltaMS", 25);
 user_pref("general.smoothScroll.msdPhysics.slowdownMinDeltaRatio", "2");
 user_pref("general.smoothScroll.msdPhysics.slowdownSpringConstant", 250);
-user_pref("general.smoothScroll.currentVelocityWeighting", "1");
-user_pref("general.smoothScroll.stopDecelerationWeighting", "1");
+user_pref("general.smoothScroll.currentVelocityWeighting", 1);
+user_pref("general.smoothScroll.stopDecelerationWeighting", 1);
 user_pref("mousewheel.default.delta_multiplier_y", 75);
 
 /****************************************************************************
