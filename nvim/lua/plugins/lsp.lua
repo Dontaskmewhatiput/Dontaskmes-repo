@@ -21,6 +21,7 @@ return {
     -- Native LSP global defaults (Neovim 0.11+)
     vim.lsp.config('*', {
       root_markers = { '.git' },
+      capabilities = require("blink.cmp").get_lsp_capabilities(),
     })
 
     vim.diagnostic.config({
@@ -104,135 +105,6 @@ return {
       end,
     })
 
-    local caps = require("blink.cmp").get_lsp_capabilities()
-    -- Server Configurations
-    vim.lsp.config['luals'] = {
-      cmd = { 'lua-language-server' },
-      filetypes = { 'lua' },
-      root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
-      capabilities = caps,
-      settings = {
-        Lua = {
-          runtime = { version = 'LuaJIT' },
-          diagnostics = { globals = { 'vim' } },
-          workspace = {
-            checkThirdParty = false,
-            library = vim.api.nvim_get_runtime_file('', true),
-          },
-          telemetry = { enable = false },
-        },
-      },
-    }
-
-    vim.lsp.config['clangd'] = {
-      cmd = { 'clangd' },
-      filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
-      root_markers = { 'compile_commands.json', '.clangd', 'configure.ac', 'Makefile', '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['rust_analyzer'] = {
-      cmd = { 'rust-analyzer' },
-      filetypes = { 'rust' },
-      root_markers = { 'Cargo.toml', 'rust-project.json', '.git' },
-      capabilities = caps,
-    }
-    vim.lsp.config['jdtls'] = {
-      cmd = { 'jdtls' },
-      filetypes = { 'java' },
-      root_markers = { 'pom.xml', 'build.gradle', 'build.gradle.kts', '.git' },
-      capabilities = caps,
-    }
-    vim.lsp.config['gopls'] = {
-      cmd = { 'gopls' },
-      filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
-      root_markers = { 'go.work', 'go.mod', '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['html'] = {
-      cmd = { 'vscode-html-language-server', '--stdio' },
-      filetypes = { 'html' },
-      root_markers = { 'package.json', '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['cssls'] = {
-      cmd = { 'vscode-css-language-server', '--stdio' },
-      filetypes = { 'css', 'scss', 'less' },
-      root_markers = { 'package.json', '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['ts_ls'] = {
-      cmd = { 'typescript-language-server', '--stdio' },
-      filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
-      root_markers = { 'package.json', 'tsconfig.json', '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['intelephense'] = {
-      cmd = { 'intelephense', '--stdio' },
-      filetypes = { 'php' },
-      root_markers = { 'composer.json', '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['jsonls'] = {
-      cmd = { 'vscode-json-language-server', '--stdio' },
-      filetypes = { 'json', 'jsonc' },
-      root_markers = { '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['nil_ls'] = {
-      cmd = { 'nil' },
-      filetypes = { 'nix' },
-      root_markers = { 'flake.nix', '.git' },
-      capabilities = caps,
-    }
-    vim.lsp.config['bashls'] = {
-      cmd = { 'bash-language-server', 'start' },
-      filetypes = { 'sh', 'bash' },
-      root_markers = { '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['dockerls'] = {
-      cmd = { 'docker-langserver', '--stdio' },
-      filetypes = { 'dockerfile' },
-      root_markers = { 'Dockerfile', '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['marksman'] = {
-      cmd = { 'marksman', 'server' },
-      filetypes = { 'markdown', 'markdown.mdx' },
-      root_markers = { '.marksman.toml', '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['taplo'] = {
-      cmd = { 'taplo', 'lsp', 'stdio' },
-      filetypes = { 'toml' },
-      root_markers = { '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['yamlls'] = {
-      cmd = { 'yaml-language-server', '--stdio' },
-      filetypes = { 'yaml' },
-      root_markers = { '.git' },
-      capabilities = caps,
-    }
-
-    vim.lsp.config['sqlls'] = {
-      cmd = { 'sql-language-server', 'up', '--method', 'stdio' },
-      filetypes = { 'sql' },
-      root_markers = { '.git' },
-      capabilities = caps,
-    }
-
     vim.filetype.add({
       extension = {
         h = 'c',
@@ -242,12 +114,11 @@ return {
       },
     })
 
-    -- Enable active servers
-    ---@diagnostic disable-next-line: invisible
-    for name, _ in pairs(vim.lsp.config._configs) do
-      if name ~= '*' then
-        vim.lsp.enable(name)
-      end
-    end
+    -- Enable active servers (configs load lazily from lsp/*.lua)
+    vim.lsp.enable({
+      'lua_ls', 'clangd', 'rust_analyzer', 'jdtls', 'gopls',
+      'html', 'cssls', 'ts_ls', 'jsonls', 'nil_ls',
+      'bashls', 'docker_language_server', 'marksman', 'taplo', 'yamlls', 'sqlls',
+    })
   end,
 }
