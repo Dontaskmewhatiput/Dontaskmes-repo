@@ -111,6 +111,17 @@ return {
         c3 = 'c3',
         d = 'd',
         templ = 'templ',
+        -- Podman
+        container = 'systemd',
+        volume = 'systemd',
+        network = 'systemd',
+        pod = 'systemd',
+      },
+      filename = {
+        ['Containerfile'] = 'dockerfile',
+      },
+      pattern = {
+        ['Containerfile%..*'] = 'dockerfile',
       },
     })
 
@@ -118,7 +129,7 @@ return {
     vim.lsp.enable({
       'lua_ls', 'clangd', 'rust_analyzer', 'jdtls', 'gopls',
       'html', 'cssls', 'ts_ls', 'jsonls', 'nil_ls',
-      'bashls', 'docker_language_server', 'marksman', 'taplo', 'yamlls', 'sqlls',
+      'bashls', 'podman_lsp', 'docker_language_server', 'marksman', 'taplo', 'yamlls', 'sqlls',
     })
   end,
 }
