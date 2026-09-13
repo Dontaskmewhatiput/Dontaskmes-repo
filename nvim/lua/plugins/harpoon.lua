@@ -25,13 +25,13 @@ return {
   dependencies = {
     "nvim-lua/plenary.nvim"
   },
-  config = function()
+config = function ()
     local harpoon = require("harpoon")
-    vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
-    vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-    vim.keymap.set("n", "<leader>fl", function() toggle_telescope(harpoon:list()) end,
+    vim.keymap.set("n", "<leader>a", function () harpoon:list():add() end)
+    vim.keymap.set("n", "<C-e>", function () harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+    vim.keymap.set("n", "<leader>fl", function () toggle_telescope(harpoon:list()) end,
       { desc = "Open harpoon window" })
-    vim.keymap.set("n", "]e", function() harpoon:list():prev() end)
-    vim.keymap.set("n", "[e", function() harpoon:list():next() end)
-  end
+    vim.keymap.set("n", "<C-p>", function() harpoon:list():prev() end)
+    vim.keymap.set("n", "<C-n>", function() harpoon:list():next() end)
+end
 }
