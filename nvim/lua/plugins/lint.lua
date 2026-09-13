@@ -10,7 +10,6 @@ return {
     require("mason-tool-installer").setup({
       ensure_installed = {
         "luacheck",         -- lua_ls
-        "cppcheck",         -- clangd
         "checkstyle",       -- jdtls
         "golangci-lint",    -- gopls
         "tidy",             -- html
@@ -30,8 +29,6 @@ return {
 
     lint.linters_by_ft = {
       lua        = { "luacheck" },
-      c          = { "cppcheck" },
-      cpp        = { "cppcheck" },
       java       = { "checkstyle" },
       go         = { "golangcilint" },
       html       = { "tidy" },
