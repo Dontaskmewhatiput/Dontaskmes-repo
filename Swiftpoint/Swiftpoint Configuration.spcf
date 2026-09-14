@@ -2559,7 +2559,7 @@ json,2,4
                                     "DataType": "trigger",
                                     "IsValid": true,
                                     "ItemType": "outputAction",
-                                    "TimeToWaitms": 4000,
+                                    "TimeToWaitms": 10,
                                     "TypeId": "wait"
                                 },
                                 {
