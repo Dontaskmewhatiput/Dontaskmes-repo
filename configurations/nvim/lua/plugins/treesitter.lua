@@ -3,17 +3,20 @@ return {
   branch = "main",
   build = ":TSUpdate",
   lazy = false,
-  init = function()
-    local ensure_installed = {
-      -- Neovim programming
+  config = function()
+    local configs = require("nvim-treesitter.config")
+    configs.setup ({
+      highlight = {
+        enabled = true 
+      },
+      indent = { enable = true },
+      autotage = { enable = true },
+    })
+    ensure_installed = {
       "lua", "vim", "vimdoc", "query",
-      -- Web development
       "html", "css", "javascript", "typescript", "json", "tsx",
-      -- Scripting and development
       "bash", "dockerfile", "markdown", "markdown_inline", "toml", "yaml",
-      -- JVM & Backend
       "java", "sql",
-      -- Systems and compiled
       "c", "cmake", "cpp", "go", "make", "ninja", "rust",
     }
     local installed = require("nvim-treesitter.config").get_installed()

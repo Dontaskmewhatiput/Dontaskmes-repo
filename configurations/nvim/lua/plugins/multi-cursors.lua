@@ -1,25 +1,61 @@
+-- lua/plugins/lint.lua
 return {
-  "brenton-leighton/multiple-cursors.nvim",
-  version = "*",  -- Use the latest tagged version
-  opts = {},  -- This causes the plugin setup function to be called
-  keys = {
-    {"<C-j>", "<Cmd>MultipleCursorsAddDown<CR>", mode = {"n", "x"}, desc = "Add cursor and move down"},
-    {"<C-k>", "<Cmd>MultipleCursorsAddUp<CR>", mode = {"n", "x"}, desc = "Add cursor and move up"},
-
-    {"<C-Up>", "<Cmd>MultipleCursorsAddUp<CR>", mode = {"n", "i", "x"}, desc = "Add cursor and move up"},
-    {"<C-Down>", "<Cmd>MultipleCursorsAddDown<CR>", mode = {"n", "i", "x"}, desc = "Add cursor and move down"},
-
-    {"<C-LeftMouse>", "<Cmd>MultipleCursorsMouseAddDelete<CR>", mode = {"n", "i"}, desc = "Add or remove cursor on mouse click"},
-    {"<C-Return>", "<Cmd>MultipleCursorsAddDelete<CR>", mode = {"n"}, desc = "Add a locked cursor or remove an existing cursor"},
-
-    {"<Leader>m", "<Cmd>MultipleCursorsAddVisualArea<CR>", mode = {"x"}, desc = "Add cursors to the lines of the visual area"},
-
-    {"<Leader>a", "<Cmd>MultipleCursorsAddMatches<CR>", mode = {"n", "x"}, desc = "Add cursors to cword"},
-    {"<Leader>A", "<Cmd>MultipleCursorsAddMatchesV<CR>", mode = {"n", "x"}, desc = "Add cursors to cword in previous area"},
-
-    {"<Leader>d", "<Cmd>MultipleCursorsAddJumpNextMatch<CR>", mode = {"n", "x"}, desc = "Add cursor and jump to next cword"},
-    {"<Leader>D", "<Cmd>MultipleCursorsJumpNextMatch<CR>", mode = {"n", "x"}, desc = "Jump to next cword"},
-
-    {"<Leader>l", "<Cmd>MultipleCursorsLock<CR>", mode = {"n", "x"}, desc = "Lock virtual cursors"},
+  "mfussenegger/nvim-lint",
+  event = { "BufReadPre", "BufNewFile" },
+  dependencies = {
+    "williamboman/mason.nvim",
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
   },
+  config = function()
+    require("mason").setup()
+
+    require("mason-tool-installer").setup({
+      ensure_installed = {
+        "luacheck",      -- lua_ls
+        "checkstyle",    -- jdtls
+        "golangci-lint", -- gopls
+        "stylelint",     -- cssls / css / scss / less
+        "eslint_d",      -- ts_ls
+        "jsonlint",      -- jsonls
+        "statix",        -- nil_ls
+        "shellcheck",    -- bashls
+        "hadolint",      -- docker_language_server
+        "markdownlint",  -- marksman
+        "yamllint",      -- yamlls
+        "sqlfluff",      -- sqlls
+      },
+    })
+
+    local lint = require("lint")
+
+    lint.linters_by_ft = {
+      lua        = { "luacheck" },
+      java       = { "checkstyle" },
+      go         = { "golangcilint" },
+      css        = { "stylelint" },
+      scss       = { "stylelint" },
+      less       = { "stylelint" },
+      javascript = { "eslint_d" },
+      typescript = { "eslint_d" },
+      json       = { "jsonlint" },
+      nix        = { "statix" },
+      sh         = { "shellcheck" },
+      bash       = { "shellcheck" },
+      dockerfile = { "hadolint" },
+      markdown   = { "markdownlint" },
+      yaml       = { "yamllint" },
+      sql        = { "sqlfluff" },
+    }
+
+    lint.linters.checkstyle.args = { "-c", "/google_checks.xml" }
+
+    lint.linters.sqlfluff.args = { "lint", "--format", "json", "--dialect", "postgres" }
+
+    vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
+      group = vim.api.nvim_create_augroup("my.lint", { clear = true }),
+      callback = function()
+        lint.try_lint()
+      end,
+    })
+  end,
 }

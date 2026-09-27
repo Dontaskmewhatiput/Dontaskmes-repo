@@ -10,10 +10,13 @@ return {
     local dap = require("dap")
     local dapui = require("dapui")
 
-    -- Mason installs and wires up the codelldb adapter automatically
+    -- Mason installs and wires up adapters automatically.
+    -- handlers = {} is what turns on the automatic wiring below; without it,
+    -- mason-nvim-dap installs the binaries but never registers them with dap.
     require("mason-nvim-dap").setup({
-      ensure_installed = { "codelldb" },
+      ensure_installed = { "codelldb", "delve", "js", "bash", "local-lua-debugger-vscode" },
       automatic_installation = true,
+      handlers = {},
     })
 
     dapui.setup()
@@ -58,6 +61,9 @@ return {
       },
     }
 
+    -- Go, JS/TS, and Bash configurations are provided by mason-nvim-dap's
+    -- default handlers (enabled via handlers = {} above) and need no manual
+    -- dap.configurations entries here.
 
     -- Keymaps
     vim.keymap.set("n", "<F5>", dap.continue)
@@ -66,5 +72,6 @@ return {
     vim.keymap.set("n", "<F11>", dap.step_into)
     vim.keymap.set("n", "<F12>", dap.step_out)
     vim.keymap.set("n", "<leader>dr", dap.repl.open)
+    vim.keymap.set("n", "<leader>du", dapui.toggle)
   end,
 }
