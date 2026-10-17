@@ -3,18 +3,30 @@ return {
   "neovim/nvim-lspconfig",
   lazy = false,
   dependencies = {
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason.nvim",
+    "mason-org/mason-lspconfig.nvim",
   },
   config = function()
-    -- Mason installs and manages the LSP server binaries
+    -- Servers that Mason installs.
+    local mason_servers = {
+      'lua_ls', 'clangd', 'rust_analyzer', 'gopls',
+      'html', 'cssls', 'ts_ls', 'jsonls', 'nil_ls',
+      'bashls', 'docker_language_server', 'marksman', 'taplo', 'yamlls', 'sqlls',
+    }
+
+    -- Servers you install yourself (pacman, cargo, nix, and so on).
+    -- Use the names of your lsp/*.lua files. Each one is skipped when its
+    -- binary is missing. Add php, c3, d, and the rest here.
+    local path_servers = { 'zls', 'hls', 'templ' }
+
+    -- jdtls is installed by Mason but started by nvim-jdtls (lua/plugins/jdtls.lua).
+    local mason_install = vim.list_extend(vim.deepcopy(mason_servers), { 'jdtls' })
+
+    -- mason.setup() puts Mason's bin/ directory on $PATH.
+    -- The availability check below depends on that.
     require("mason").setup()
     require("mason-lspconfig").setup({
-      ensure_installed = {
-        'lua_ls', 'clangd', 'rust_analyzer', 'jdtls', 'gopls',
-        'html', 'cssls', 'ts_ls', 'jsonls', 'nil_ls',
-        'bashls', 'docker_language_server', 'marksman', 'taplo', 'yamlls', 'sqlls',
-      },
+      ensure_installed = mason_install,
       automatic_enable = false,
     })
 
@@ -63,12 +75,15 @@ return {
         local buf    = args.buf
         local map    = function(mode, lhs, rhs) vim.keymap.set(mode, lhs, rhs, { buffer = buf }) end
 
+        -- Neovim 0.11 already maps these globally:
+        --   grr references, gri implementation, grn rename,
+        --   gra code action, grt type definition, gO document symbols.
+        -- A buffer-local `gr` or `gi` would make Neovim wait out 'timeoutlen'
+        -- (gr) or hide the built-in `gi` (insert at last insert position).
         map('n', 'K', vim.lsp.buf.hover)
         map('n', 'gd', vim.lsp.buf.definition)
         map('n', 'gD', vim.lsp.buf.declaration)
-        map('n', 'gi', vim.lsp.buf.implementation)
         map('n', 'go', vim.lsp.buf.type_definition)
-        map('n', 'gr', vim.lsp.buf.references)
         map('n', 'gs', vim.lsp.buf.signature_help)
         map('n', 'gl', vim.diagnostic.open_float)
         map('n', '<F2>', vim.lsp.buf.rename)
@@ -128,12 +143,33 @@ return {
       },
     })
 
-    -- Enable active servers (configs load lazily from lsp/*.lua)
-    -- jdtls is excluded: nvim-jdtls starts it directly (see lua/plugins/jdtls.lua)
-    vim.lsp.enable({
-      'lua_ls', 'clangd', 'rust_analyzer', 'gopls',
-      'html', 'cssls', 'ts_ls', 'jsonls', 'nil_ls',
-      'bashls', 'docker_language_server', 'marksman', 'taplo', 'yamlls', 'sqlls',
-    })
+    -- Enable a server only when its binary exists.
+    -- A missing server never raises a spawn error.
+    -- Mason installs run in the background, so restart Neovim once after the
+    -- first install. Run :LspMissing to list skipped servers.
+    local missing = {}
+    local function enable_available(names)
+      for _, name in ipairs(names) do
+        local cmd = (vim.lsp.config[name] or {}).cmd
+        local found = type(cmd) == 'function'
+            or (type(cmd) == 'table' and vim.fn.executable(cmd[1]) == 1)
+        if found then
+          vim.lsp.enable(name)
+        else
+          table.insert(missing, name)
+        end
+      end
+    end
+
+    enable_available(mason_servers)
+    enable_available(path_servers)
+
+    vim.api.nvim_create_user_command('LspMissing', function()
+      if #missing == 0 then
+        vim.notify('All configured LSP servers are available')
+      else
+        vim.notify('LSP servers not found: ' .. table.concat(missing, ', '), vim.log.levels.WARN)
+      end
+    end, {})
   end,
 }

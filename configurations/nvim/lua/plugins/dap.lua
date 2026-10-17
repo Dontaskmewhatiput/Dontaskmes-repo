@@ -4,7 +4,9 @@ return {
   dependencies = {
     "rcarriga/nvim-dap-ui",
     "nvim-neotest/nvim-nio",
+    "theHamsta/nvim-dap-virtual-text",
     "jay-babu/mason-nvim-dap.nvim",
+    "williamboman/mason.nvim",
   },
   config = function()
     local dap = require("dap")
@@ -18,6 +20,23 @@ return {
       automatic_installation = true,
       handlers = {},
     })
+
+    require("nvim-dap-virtual-text").setup {
+      -- Hide secrets and keys
+      display_callback = function(variable)
+        local name = string.lower(variable.name)
+        local value = string.lower(variable.name)
+        if name:match "secret" or name:match "api" or value:match "secret" or value:match "api" then
+          return "*****"
+        end
+
+        if #variable.value > 15 then
+          return " " .. string.sub(variable.value, 1, 15) .. " ... "
+        end
+
+        return " " .. variable.value
+      end,
+    }
 
     dapui.setup()
 
