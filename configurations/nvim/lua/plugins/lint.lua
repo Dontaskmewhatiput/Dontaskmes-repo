@@ -28,9 +28,6 @@ return {
         "sqlfluff",           -- sqlls
         "java-debug-adapter", -- jdtls debug bundle (see lua/plugins/jdtls.lua)
         "java-test",          -- jdtls debug bundle (see lua/plugins/jdtls.lua)
-        -- "tidy" is NOT in the Mason registry. html linting via Mason
-        -- isn't available; either drop html linting or install `tidy`
-        -- yourself outside Mason. Left out of linters_by_ft below.
       },
     })
 
@@ -53,7 +50,6 @@ return {
       markdown   = { "markdownlint" },
       yaml       = { "yamllint" },
       sql        = { "sqlfluff" },
-      -- html removed: no Mason-managed linter available (see note above)
     }
 
     -- checkstyle needs an explicit ruleset or it errors immediately.
@@ -63,7 +59,7 @@ return {
     -- sqlfluff needs an explicit dialect or it fails to parse most SQL.
     -- Change "postgres" to whatever dialect you actually use
     -- (mysql, sqlite, snowflake, bigquery, etc.)
-    lint.linters.sqlfluff.args = { "lint", "--format", "json", "--dialect", "postgres" }
+    lint.linters.sqlfluff.args = { "lint", "--format", "json", "--dialect", "postgres", "-" }
 
     vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
       group = vim.api.nvim_create_augroup("my.lint", { clear = true }),

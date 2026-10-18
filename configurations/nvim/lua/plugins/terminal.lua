@@ -12,7 +12,7 @@ return {
       insert_mappings = true,
       terminal_mappings = true,
       persist_size = true,
-      direction = "horizontal",
+      direction = "float",
       close_on_exit = true,
       shell = vim.o.shell,
       float_opts = {
@@ -21,20 +21,21 @@ return {
       },
     })
 
-    -- Terminal toggle
-    vim.keymap.set({ "n", "t" }, "<C-_>", "<cmd>ToggleTerm<cr>", { desc = "Toggle Terminal" })
-
-    -- Terminal-mode window navigation
+    -- Back to normal mode
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "toggleterm",
       callback = function()
         local topts = { buffer = 0, silent = true }
-        vim.keymap.set("t", "<A-C-h>", [[<C-\><C-n><C-w>h]], topts)
-        vim.keymap.set("t", "<A-C-j>", [[<C-\><C-n><C-w>j]], topts)
-        vim.keymap.set("t", "<A-C-k>", [[<C-\><C-n><C-w>k]], topts)
-        vim.keymap.set("t", "<A-C-l>", [[<C-\><C-n><C-w>l]], topts)
         vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], topts)
+        vim.keymap.set("t", "<C-[>", [[<C-\><C-n>]], topts)
       end,
     })
+
+    -- Alt + hjkl moves focus
+    -- Ctrl + hjkl moves focus
+    for _, key in ipairs({ "h", "j", "k", "l" }) do
+      vim.keymap.set("n", "<C-" .. key .. ">", "<C-w>" .. key, { silent = true })
+      vim.keymap.set("t", "<C-" .. key .. ">", [[<C-\><C-n><C-w>]] .. key, { silent = true })
+    end
   end,
 }

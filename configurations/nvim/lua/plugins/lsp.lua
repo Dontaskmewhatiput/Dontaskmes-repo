@@ -5,6 +5,7 @@ return {
   dependencies = {
     "mason-org/mason.nvim",
     "mason-org/mason-lspconfig.nvim",
+    "b0o/SchemaStore.nvim",
   },
   config = function()
     -- Servers that Mason installs.
@@ -12,6 +13,7 @@ return {
       'lua_ls', 'clangd', 'rust_analyzer', 'gopls',
       'html', 'cssls', 'ts_ls', 'jsonls', 'nil_ls',
       'bashls', 'docker_language_server', 'marksman', 'taplo', 'yamlls', 'sqlls',
+      'basedpyright', 'ruff', 'terraformls',
     }
 
     -- Servers you install yourself (pacman, cargo, nix, and so on).
@@ -34,6 +36,60 @@ return {
     vim.lsp.config('*', {
       root_markers = { '.git' },
       capabilities = require("blink.cmp").get_lsp_capabilities(),
+    })
+
+    -- Per-server settings. Each call merges with the server default.
+    vim.lsp.config('gopls', {
+      settings = {
+        gopls = {
+          gofumpt = true,
+          usePlaceholders = true,
+          hints = {
+            parameterNames = true,
+            assignVariableTypes = true,
+            compositeLiteralFields = true,
+            constantValues = true,
+            functionTypeParameters = true,
+            rangeVariableTypes = true,
+          },
+        },
+      },
+    })
+
+    vim.lsp.config('rust_analyzer', {
+      settings = {
+        ['rust-analyzer'] = {
+          check = { command = 'clippy' },
+        },
+      },
+    })
+
+    vim.lsp.config('basedpyright', {
+      settings = {
+        basedpyright = {
+          -- Ruff organizes imports.
+          disableOrganizeImports = true,
+        },
+      },
+    })
+
+    vim.lsp.config('yamlls', {
+      settings = {
+        yaml = {
+          -- SchemaStore.nvim supplies the schemas.
+          schemaStore = { enable = false, url = '' },
+          schemas = require('schemastore').yaml.schemas(),
+        },
+      },
+    })
+
+    vim.lsp.config('jsonls', {
+      settings = {
+        json = {
+          schemas = require('schemastore').json.schemas(),
+          validate = { enable = true },
+        },
+      },
     })
 
     vim.diagnostic.config({
@@ -88,10 +144,21 @@ return {
         map('n', 'gl', vim.diagnostic.open_float)
         map('n', '<F2>', vim.lsp.buf.rename)
         map({ 'n', 'x' }, '<F3>', function() vim.lsp.buf.format({ async = true }) end)
-        map('n', '<F4>', vim.lsp.buf.code_action)
+        map('n', '<leader>ca', vim.lsp.buf.code_action)
+
+        -- Basedpyright handles hover. Ruff would duplicate it.
+        if client.name == 'ruff' then
+          client.server_capabilities.hoverProvider = false
+        end
+
+        if client:supports_method('textDocument/inlayHint') then
+          vim.lsp.inlay_hint.enable(true, { bufnr = buf })
+        end
 
         if client:supports_method('textDocument/documentHighlight') then
           local highlight_augroup = vim.api.nvim_create_augroup('my.lsp.highlight', { clear = false })
+          -- Clear first. Two servers on one buffer would add each autocmd twice.
+          vim.api.nvim_clear_autocmds({ buffer = buf, group = highlight_augroup })
           vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
             buffer = buf,
             group = highlight_augroup,
