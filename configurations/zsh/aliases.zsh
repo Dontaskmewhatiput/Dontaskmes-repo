@@ -54,6 +54,7 @@ alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 alias gl='git pull '
 alias gp='git push '
 alias gc='git commit '
+alias ga='git add '
 
 # =========================================================
 # Video
