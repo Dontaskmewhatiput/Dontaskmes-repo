@@ -1,10 +1,6 @@
 # ~/.config/zsh/plugins.zsh
 ZPLUGINDIR="${ZDOTDIR:-$HOME/.config/zsh}/plugins"
 
-# Stop autosuggestions from adding ghost text after menu picks.
-# ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(complete-word menu-select menu-complete reverse-menu-complete)
-#
-
 _zplugin_load() {
   local plugin_path="${ZPLUGINDIR}/${2}"
   if [[ ! -d "$plugin_path" ]]; then
@@ -24,17 +20,20 @@ zplugin-update() {
   done
 }
 
-_zplugin_load marlonrichert zsh-autocomplete
-_zplugin_load zsh-users zsh-autosuggestions
+autoload -Uz compinit && compinit
+
 _zplugin_load danielshahaf zsh-syntax-highlighting
 _zplugin_load zsh-users zsh-history-substring-search
 _zplugin_load jeffreytse zsh-vi-mode
 _zplugin_load michaelaquilina zsh-you-should-use
+_zplugin_load zsh-users zsh-autosuggestions
+_zplugin_load marlonrichert zsh-autocomplete
 
-zstyle ':autocomplete:*' min-input 0
-zstyle ':autocomplete:*' delay 0
-zstyle ':autocomplete:*' list-lines 30
+zstyle ':autocomplete:*' min-input 1
+zstyle ':autocomplete:*' delay 0.05
+zstyle ':autocomplete:*' list-lines 10
 
+source "$ZDOTDIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
 
 # Sourced plugins
 # source "$ZDOTDIR/plugins/presets/archlinux/archlinux.plugin.zsh"
