@@ -1,0 +1,19 @@
+
+if [[ -z "$XDG_CONFIG_HOME" ]]
+then
+    export XDG_CONFIG_HOME="$HOME/.config"
+fi
+
+# Quick directory for ~/.config/zsh
+if [[ -d "$XDG_CONFIG_HOME/zsh" ]]
+then
+    export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+fi
+
+# Editor 
+#
+export EDITOR='nvim'
+
+if [[ -n $SSH_CONNECTION ]]; then
+   export EDITOR='nvim'
+ fi

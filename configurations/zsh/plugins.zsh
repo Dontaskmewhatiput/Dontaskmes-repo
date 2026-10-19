@@ -1,0 +1,41 @@
+# ~/.config/zsh/plugins.zsh
+ZPLUGINDIR="${ZDOTDIR:-$HOME/.config/zsh}/plugins"
+
+# Stop autosuggestions from adding ghost text after menu picks.
+# ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(complete-word menu-select menu-complete reverse-menu-complete)
+#
+
+_zplugin_load() {
+  local plugin_path="${ZPLUGINDIR}/${2}"
+  if [[ ! -d "$plugin_path" ]]; then
+    mkdir -p "$ZPLUGINDIR"
+    echo "Installing ${2}..."
+    git clone --depth=1 "https://github.com/${1}/${2}" "$plugin_path" \
+      || { echo "ERROR: failed to install ${2}" >&2; return 1; }
+  fi
+  source "${plugin_path}/${2}.plugin.zsh"
+}
+
+zplugin-update() {
+  local dir
+  for dir in "${ZPLUGINDIR}"/*/; do
+    echo "Updating ${dir:t}..."
+    git -C "$dir" pull --ff-only
+  done
+}
+
+_zplugin_load marlonrichert zsh-autocomplete
+_zplugin_load zsh-users zsh-autosuggestions
+_zplugin_load danielshahaf zsh-syntax-highlighting
+_zplugin_load zsh-users zsh-history-substring-search
+_zplugin_load jeffreytse zsh-vi-mode
+_zplugin_load michaelaquilina zsh-you-should-use
+
+zstyle ':autocomplete:*' min-input 0
+zstyle ':autocomplete:*' delay 0
+zstyle ':autocomplete:*' list-lines 30
+
+
+# Sourced plugins
+# source "$ZDOTDIR/plugins/presets/archlinux/archlinux.plugin.zsh"
+# source "$ZDOTDIR/plugins/presets/tailscale/tailscale.plugin.zsh"
