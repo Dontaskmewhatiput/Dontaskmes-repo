@@ -12,7 +12,7 @@ return {
       insert_mappings = true,
       terminal_mappings = true,
       persist_size = true,
-      direction = "float",
+      direction = "horizontal",
       close_on_exit = true,
       shell = vim.o.shell,
       float_opts = {
@@ -33,9 +33,9 @@ return {
 
     -- Alt + hjkl moves focus
     -- Ctrl + hjkl moves focus
+    -- Ctrl + hjkl moves focus in normal mode only
     for _, key in ipairs({ "h", "j", "k", "l" }) do
       vim.keymap.set("n", "<C-" .. key .. ">", "<C-w>" .. key, { silent = true })
-      vim.keymap.set("t", "<C-" .. key .. ">", [[<C-\><C-n><C-w>]] .. key, { silent = true })
     end
   end,
 }

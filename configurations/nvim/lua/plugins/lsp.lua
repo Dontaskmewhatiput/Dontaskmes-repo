@@ -91,6 +91,11 @@ return {
         },
       },
     })
+    vim.lsp.config('docker_language_server', {
+      init_options = {
+        dockercomposeExperimental = { composeSupport = true },
+      },
+    })
 
     vim.diagnostic.config({
       virtual_text  = true,
@@ -145,15 +150,16 @@ return {
         map('n', '<F2>', vim.lsp.buf.rename)
         map({ 'n', 'x' }, '<F3>', function() vim.lsp.buf.format({ async = true }) end)
         map('n', '<leader>ca', vim.lsp.buf.code_action)
+        map('n', '<leader>ch', function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = buf }), { bufnr = buf })
+        end)
 
         -- Basedpyright handles hover. Ruff would duplicate it.
         if client.name == 'ruff' then
           client.server_capabilities.hoverProvider = false
         end
 
-        if client:supports_method('textDocument/inlayHint') then
-          vim.lsp.inlay_hint.enable(true, { bufnr = buf })
-        end
+
 
         if client:supports_method('textDocument/documentHighlight') then
           local highlight_augroup = vim.api.nvim_create_augroup('my.lsp.highlight', { clear = false })
