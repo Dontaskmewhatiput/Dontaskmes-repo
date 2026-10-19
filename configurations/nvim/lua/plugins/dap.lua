@@ -2,56 +2,44 @@
 return {
   "mfussenegger/nvim-dap",
   dependencies = {
-    "rcarriga/nvim-dap-ui",
-    "nvim-neotest/nvim-nio",
+    "igorlfs/nvim-dap-view",
     "theHamsta/nvim-dap-virtual-text",
     "jay-babu/mason-nvim-dap.nvim",
     "williamboman/mason.nvim",
   },
   config = function()
     local dap = require("dap")
-    local dapui = require("dapui")
+    local dap_view = require("dap-view")
 
-    -- Mason installs and wires up adapters automatically.
-    -- handlers = {} is what turns on the automatic wiring below; without it,
-    -- mason-nvim-dap installs the binaries but never registers them with dap.
     require("mason-nvim-dap").setup({
-      ensure_installed = { "codelldb", "delve", "js", "bash", "local-lua-debugger-vscode" },
+      ensure_installed = { 
+        "codelldb", 
+        "delve",    
+        "js",       
+        "bash",     
+        "python",   
+        "java-debug-adapter", 
+        "local-lua-debugger-vscode" 
+      },
       automatic_installation = true,
       handlers = {},
     })
 
-    require("nvim-dap-virtual-text").setup {
-      -- Hide secrets and keys
-      display_callback = function(variable)
-        local name = string.lower(variable.name)
-        local value = string.lower(variable.name)
-        if name:match "secret" or name:match "api" or value:match "secret" or value:match "api" then
-          return "*****"
-        end
+    require("nvim-dap-virtual-text").setup()
+    dap_view.setup()
 
-        if #variable.value > 15 then
-          return " " .. string.sub(variable.value, 1, 15) .. " ... "
-        end
-
-        return " " .. variable.value
-      end,
-    }
-
-    dapui.setup()
-
-    -- Open/close the UI in step with the debug session
-    dap.listeners.after.event_initialized["dapui_config"] = function()
-      dapui.open()
+    -- Open/close the view in step with the debug session
+    dap.listeners.after.event_initialized["dap_view_config"] = function()
+      dap_view.open()
     end
-    dap.listeners.before.event_terminated["dapui_config"] = function()
-      dapui.close()
+    dap.listeners.before.event_terminated["dap_view_config"] = function()
+      dap_view.close()
     end
-    dap.listeners.before.event_exited["dapui_config"] = function()
-      dapui.close()
+    dap.listeners.before.event_exited["dap_view_config"] = function()
+      dap_view.close()
     end
 
-    -- Launch configuration for C and C++
+    -- Configurations
     dap.configurations.cpp = {
       {
         name = "Launch file",
@@ -65,32 +53,20 @@ return {
       },
     }
     dap.configurations.c = dap.configurations.cpp
+    dap.configurations.rust = dap.configurations.cpp
 
-    dap.configurations.rust = {
-      {
-        name = "Launch file",
-        type = "codelldb",
-        request = "launch",
-        program = function()
-          return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/target/debug", "file")
-        end,
-        cwd = "${workspaceFolder}",
-        stopOnEntry = false,
-        sourceLanguages = { "rust" },
-      },
-    }
+-- Keymaps
+    vim.keymap.set("n", "<F5>", dap.continue, { desc = "DAP Continue" })
+    vim.keymap.set("n", "<F9>", dap.toggle_breakpoint, { desc = "DAP Toggle Breakpoint" })
+    vim.keymap.set("n", "<F10>", dap.step_over, { desc = "DAP Step Over" })
+    vim.keymap.set("n", "<F11>", dap.step_into, { desc = "DAP Step Into" })
+    vim.keymap.set("n", "<F12>", dap.step_out, { desc = "DAP Step Out" })
 
-    -- Go, JS/TS, and Bash configurations are provided by mason-nvim-dap's
-    -- default handlers (enabled via handlers = {} above) and need no manual
-    -- dap.configurations entries here.
+    -- DAP View Keybindings (using function wrappers to prevent nil errors)
+    vim.keymap.set("n", "<leader>dc", function() dap_view.toggle() end, { desc = "Toggle DAP View" })
+    vim.keymap.set({ "n", "v" }, "<leader>de", function() dap_view.eval() end, { desc = "DAP View Evaluate" })
+    vim.keymap.set("n", "<leader>dw", function() dap_view.add_expr() end, { desc = "DAP View Add Watch Expression" })
+    vim.keymap.set("n", "<leader>dr", function() dap.repl.open() end, { desc = "DAP Open REPL" })
 
-    -- Keymaps
-    vim.keymap.set("n", "<F5>", dap.continue)
-    vim.keymap.set("n", "<F9>", dap.toggle_breakpoint)
-    vim.keymap.set("n", "<F10>", dap.step_over)
-    vim.keymap.set("n", "<F11>", dap.step_into)
-    vim.keymap.set("n", "<F12>", dap.step_out)
-    vim.keymap.set("n", "<leader>dr", dap.repl.open)
-    vim.keymap.set("n", "<leader>du", dapui.toggle)
   end,
 }
