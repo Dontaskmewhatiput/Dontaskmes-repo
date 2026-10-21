@@ -37,6 +37,8 @@ lf() { # zsh follow lf navigation
     fi
 }
 
+
+
 # =========================================================
 # Editor
 # =========================================================
@@ -72,10 +74,16 @@ alias paclocs='pacman -Qs'
 alias pacrem='sudo pacman -Rns'
 alias pacrmorphans='sudo pacman -Rs $(pacman -Qtdq)'
 alias aurora="parui"
+alias pacs='pacman -Ss'
 
 # =========================================================
 # System utilities
 # =========================================================
 alias mirrors="reflector -p https --latest 25 --country US --age 2 --threads 16 --download-timeout 30 --connection-timeout 20 --sort rate --save /etc/pacman.d/mirrorlist "
+alias top='btop'
+alias ff='fastfetch'
 
-
+# =========================================================
+# General use
+# =========================================================
+alias ex='exit'

@@ -16,9 +16,6 @@ setopt AUTOCD
 setopt NOBEEP 
 setopt NUMERIC_GLOB_SORT
 
-# Plugins 
-source "$ZDOTDIR/plugins.zsh"
-
 # Interactive menu completion 
 zstyle ':completion:*' menu select
 # Make completion case-insensitive
@@ -33,7 +30,7 @@ if [[ -f /usr/share/fzf/key-bindings.zsh ]]; then
   source /usr/share/fzf/completion.zsh
 fi
 
-# Config files modular
+# Modular config files
 
 # Plugins 
 source "$ZDOTDIR/plugins.zsh"
@@ -49,3 +46,4 @@ source "$ZDOTDIR/prompt.zsh"
 
 # Bindings 
 source "$ZDOTDIR/bindings.zsh"
+

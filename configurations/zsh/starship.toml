@@ -9,15 +9,12 @@ disabled = false
 format = "[$symbol](#blue) "
 
 [os.symbols]
-Ubuntu  = "󰕈"
 Artix   = "󰣇"
 Arch    = "󰣇"
-CachyOS = "󰣇"
-Macos   = ""
 
 [directory]
 format            = "[$path](cyan) "
-truncation_length = 4
+truncation_length = 5
 truncate_to_repo  = true
 
 [git_branch]
@@ -52,6 +49,6 @@ symbol = ""
 format = "[$symbol $version](purple) "
 
 [character]
-success_symbol = "[❯](green)"
+success_symbol = "[❯](white)"
 error_symbol   = "[❯](red)"
 vimcmd_symbol  = "[❮](blue)"
