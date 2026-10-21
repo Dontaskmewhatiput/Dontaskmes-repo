@@ -5,7 +5,7 @@ return {
   config = function()
     require("toggleterm").setup({
       size = 15,
-      open_mapping = [[<C-/>]],
+      open_mapping = [[<C-_>]],
       hide_numbers = true,
       shade_terminals = true,
       start_in_insert = true,
@@ -27,11 +27,10 @@ return {
       callback = function()
         local topts = { buffer = 0, silent = true }
         vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], topts)
-        vim.keymap.set("t", "<C-[>", [[<C-\><C-n>]], topts)
+        vim.keymap.set("n", "<C-[>", [[<C-\><C-n>]], topts)
       end,
     })
 
-    -- Alt + hjkl moves focus
     -- Ctrl + hjkl moves focus
     -- Ctrl + hjkl moves focus in normal mode only
     for _, key in ipairs({ "h", "j", "k", "l" }) do
