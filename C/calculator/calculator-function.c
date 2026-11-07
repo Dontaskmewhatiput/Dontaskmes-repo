@@ -14,8 +14,6 @@ void calculate(float num1, float num2, char op, float *result) {
             *result = num1 / num2;
         }
     } 
-    
-
 }
 
 int main () {
